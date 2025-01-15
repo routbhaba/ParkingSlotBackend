@@ -14,6 +14,7 @@ import com.interland.service.ParkingSlotService;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("parking")
 public class ParkingSlotController {
+	@Autowired
+	private  ParkingSlotService parkingSlotService;
 	
-	private final ParkingSlotService parkingSlotService;
 
-	public ParkingSlotController(ParkingSlotService parkingSlotService) {
-		super();
-		this.parkingSlotService = parkingSlotService;
-	}
+
 
 @PostMapping("/add")
 public ResponseEntity<ServiceResponse> bookParkingSlot(@Valid @RequestBody ParkingSlotDto parkingSlotDto) throws UserAlreadyExistException {    
@@ -67,9 +66,16 @@ public ResponseEntity<ServiceResponse> searchByPageGroup(@RequestParam("searchPa
 	return new ResponseEntity<>(parkingSlotService.parkingSlotSpecifications(searchParam,iDisplayStart,iDisplayLength), new HttpHeaders(), HttpStatus.OK);
 }
 @PostMapping("/getaccesstoken")
-public ResponseEntity<ServiceResponse> getAccessToken(@Valid @RequestBody Users user) throws UserNotFoundException{
+public ResponseEntity<ServiceResponse> getAccessToken( @RequestBody Users user) throws UserNotFoundException{
 	return new ResponseEntity<>(parkingSlotService.getAccessToken(user),HttpStatus.OK);
 }
-	
+
+//@PostMapping("/create")
+//public String createUser(@RequestParam String username,
+//                         @RequestParam String email,
+//                         @RequestParam String password) {
+//    return keycloakAdminService.createUser(username, email, password);
+//}
+//	
 
 }
